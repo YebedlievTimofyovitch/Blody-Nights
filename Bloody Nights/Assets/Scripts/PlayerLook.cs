@@ -4,21 +4,37 @@ using UnityEngine;
 
 public class PlayerLook : MonoBehaviour
 {
+    private PlayerMove player_Move = null;
+
     [SerializeField] private string mouseXInputname = "", mouseYInputName = "";
     [SerializeField] private float mouseSensetivity = 1.0f;
 
     [SerializeField] Transform playerBody_Transform = null;
 
+    [SerializeField] float headBobb_Speed = 1.0f;
+    [SerializeField] float headBobb_Multiplyer = 1.0f;
+    [SerializeField] float headBobb_VerticalDistance = 0.15f;
+    [SerializeField] float headBobb_HorizontalDistance = 0.05f;
+    private Vector3 original_Position = Vector3.zero;
+
     private float xAxisClamp = 0.0f;
 
     private void Awake()
     {
+        player_Move = GetComponentInParent<PlayerMove>();
+        original_Position = transform.position;
         LockMouseCursorToCenter();
     }
 
     private void Update()
     {
+        Application.targetFrameRate = 60;
         CameraRotation();
+
+        if (player_Move.IsMoving)
+            HeadBobb();
+        else
+            ReturnHeadToOrigin();
     }
 
     private void LockMouseCursorToCenter()
@@ -57,5 +73,22 @@ public class PlayerLook : MonoBehaviour
         transform.eulerAngles = cameraEulers;
     }
 
+    private void HeadBobb()
+    {
+        float headBobbVert = Mathf.Sin(Time.time * headBobb_Speed) * headBobb_Multiplyer * Time.deltaTime;
+        float headBobbHori = Mathf.Cos(Time.time * headBobb_Speed) * headBobb_Multiplyer *Time.deltaTime;
 
+        float clampedHBVert = Mathf.Clamp(headBobbVert, -headBobb_VerticalDistance, headBobb_VerticalDistance);
+        float clampedHBhori = Mathf.Clamp(headBobbHori , -headBobb_HorizontalDistance , headBobb_HorizontalDistance);
+
+        clampedHBhori -= clampedHBhori / 2.0f;
+        clampedHBVert -= clampedHBVert / 2.0f;
+
+        transform.localPosition += new Vector3(clampedHBVert, clampedHBhori, 0.0f);
+    }
+
+    private void ReturnHeadToOrigin()
+    {
+        transform.localPosition = Vector3.Lerp(transform.localPosition, original_Position, headBobb_Speed * Time.deltaTime);
+    }
 }
