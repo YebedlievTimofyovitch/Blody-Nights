@@ -28,10 +28,9 @@ public class PlayerLook : MonoBehaviour
 
     private void Update()
     {
-        Application.targetFrameRate = 60;
         CameraRotation();
 
-        if (player_Move.IsMoving)
+        if (player_Move.IsMoving && player_Move.IsGrounded)
             HeadBobb();
         else
             ReturnHeadToOrigin();
@@ -84,7 +83,7 @@ public class PlayerLook : MonoBehaviour
         clampedHBhori -= clampedHBhori / 2.0f;
         clampedHBVert -= clampedHBVert / 2.0f;
 
-        transform.localPosition += new Vector3(clampedHBVert, clampedHBhori, 0.0f);
+        transform.localPosition += new Vector3(clampedHBhori, clampedHBVert, 0.0f);
     }
 
     private void ReturnHeadToOrigin()
