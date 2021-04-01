@@ -11,10 +11,15 @@ public class EnemyAI : MonoBehaviour
     private float distance_ToTarget = Mathf.Infinity;
     NavMeshAgent nav_M_Agent = null;
 
+    [SerializeField] private float rotation_Speed = 5.0f;
+
+    private Animator enemy_Animator = null;
+
     private bool is_Provoked = false;
 
     void Awake()
     {
+        enemy_Animator = GetComponent<Animator>();
         nav_M_Agent = GetComponent<NavMeshAgent>();
     }
 
@@ -39,22 +44,42 @@ public class EnemyAI : MonoBehaviour
 
     private void EngageTarget()
     {
-        if (distance_ToTarget >= nav_M_Agent.stoppingDistance)
+        if (distance_ToTarget > nav_M_Agent.stoppingDistance)
         {
+            enemy_Animator.SetBool("Attack", false);
+            enemy_Animator.SetTrigger("Move");
             ChaseTarget();
         }
-        else
+        else if(distance_ToTarget <= nav_M_Agent.stoppingDistance + 0.1f)
+        {
             AttackTarget();
+            RotateTowardsTraget();
+        }
     }
 
     private void ChaseTarget()
     {
+
         nav_M_Agent.SetDestination(Target.position);
     }
 
     private void AttackTarget()
     {
-        print("Attacking " + Target.name);
+        enemy_Animator.SetBool("Attack", true);
+    }
+
+    private void RotateTowardsTraget()
+    {
+        Vector3 relative_TargetPosition = (Target.position - transform.position).normalized;
+
+        Quaternion lookAt_Roation = Quaternion.LookRotation(new Vector3(relative_TargetPosition.x , 0.0f , relative_TargetPosition.z));
+
+        transform.rotation = Quaternion.Slerp(transform.rotation , lookAt_Roation , rotation_Speed * Time.deltaTime);
+    }
+
+    public void OnDamageTaken()
+    {
+        is_Provoked = true;
     }
 
     private void OnDrawGizmosSelected()

@@ -9,6 +9,8 @@ public class EnemyHealth : MonoBehaviour
 
     public void LoseHealth(float damage)
     {
+        BroadcastMessage("OnDamageTaken");
+
         Health -= damage;
         if(Health <= 0.0f)
         {

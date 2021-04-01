@@ -7,6 +7,7 @@ public class PlayerLook : MonoBehaviour
     private PlayerMove player_Move = null;
 
     [SerializeField] private string mouseXInputname = "", mouseYInputName = "";
+    private bool is_CursorLocked = true;
     [SerializeField] private float mouseSensetivity = 1.0f;
 
     [SerializeField] Transform playerBody_Transform = null;
@@ -23,11 +24,13 @@ public class PlayerLook : MonoBehaviour
     {
         player_Move = GetComponentInParent<PlayerMove>();
         original_Position = transform.position;
-        LockMouseCursorToCenter();
+        
     }
 
     private void Update()
     {
+        LockMouseCursorToCenter();
+
         CameraRotation();
 
         if (player_Move.IsMoving && player_Move.IsGrounded)
@@ -38,7 +41,24 @@ public class PlayerLook : MonoBehaviour
 
     private void LockMouseCursorToCenter()
     {
-        Cursor.lockState = CursorLockMode.Locked;
+        if(PlayerHealth.is_Dead)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Time.timeScale = 0.0f;
+            return;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            is_CursorLocked = !is_CursorLocked;
+        }
+
+
+        if(is_CursorLocked)
+            Cursor.lockState = CursorLockMode.Locked;
+        else
+            Cursor.lockState = CursorLockMode.None;
+        
     }
 
     private void CameraRotation()
