@@ -23,7 +23,7 @@ public class PlayerLook : MonoBehaviour
     private void Awake()
     {
         player_Move = GetComponentInParent<PlayerMove>();
-        original_Position = transform.position;
+        original_Position = transform.localPosition;
         
     }
 
@@ -33,9 +33,9 @@ public class PlayerLook : MonoBehaviour
 
         CameraRotation();
 
-        if (player_Move.IsMoving && player_Move.IsGrounded)
+       if (player_Move.IsMoving && player_Move.IsGrounded)
             HeadBobb();
-        else
+       else
             ReturnHeadToOrigin();
     }
 
