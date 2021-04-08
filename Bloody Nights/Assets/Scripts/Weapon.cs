@@ -138,7 +138,7 @@ public class Weapon : MonoBehaviour
 
             print("Ammo Total = :" + ammo_Total);
             has_Ammo_InMag = true;
-            ammo_InMag = ammountToAdd;
+            ammo_InMag += ammountToAdd;
         }
     }
 
@@ -149,7 +149,7 @@ public class Weapon : MonoBehaviour
 
     private void MuzzleFalsh()
     {
-        if (Input.GetKey(fire_Button))
+        if (Input.GetKey(fire_Button) && has_Ammo_InMag)
         {
             ParticleSystem.EmissionModule emmision = muzzle_Flash.emission;
             emmision.rateOverTime = 1000.0f;
