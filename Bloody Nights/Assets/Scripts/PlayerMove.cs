@@ -6,7 +6,7 @@ public class PlayerMove : MonoBehaviour
 {
     private CharacterController player_ChaCon = null;
     private bool is_Grounded = true;
-    public bool IsGrounded { get{ return is_Grounded; }}
+    public bool IsGrounded { get { return is_Grounded; }}
 
     private bool is_Moving = false;
     public bool IsMoving { get { return is_Moving; } }

@@ -20,11 +20,11 @@ RenderSettings:
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
+  m_AmbientSkyColor: {r: 0.46226418, g: 0.46226418, b: 0.46226418, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
-  m_AmbientMode: 0
+  m_AmbientMode: 1
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
   m_SkyboxMaterial: {fileID: 2100000, guid: 5b921f0dfcce9284b9ce6ba62e707976, type: 2}
   m_HaloStrength: 0.5
@@ -755,7 +755,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4545988847316358427, guid: abf45460ad58bbd438749c2a72c484e8, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4545988847316358427, guid: abf45460ad58bbd438749c2a72c484e8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5526,7 +5526,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7501975499192271052, guid: a2d23707d349af044bf3f1da733ecde7, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7501975499192271052, guid: a2d23707d349af044bf3f1da733ecde7, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5568,40 +5568,5 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7501975499785406662, guid: a2d23707d349af044bf3f1da733ecde7, type: 3}
-      propertyPath: ammo_InMag
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 7501975499785406662, guid: a2d23707d349af044bf3f1da733ecde7, type: 3}
-      propertyPath: reload_Key
-      value: 114
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a2d23707d349af044bf3f1da733ecde7, type: 3}
---- !u!20 &7501975499785406661 stripped
-Camera:
-  m_CorrespondingSourceObject: {fileID: 1678823538, guid: a2d23707d349af044bf3f1da733ecde7, type: 3}
-  m_PrefabInstance: {fileID: 7501975499785406660}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &7501975499785406662 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7501975500467578293, guid: a2d23707d349af044bf3f1da733ecde7, type: 3}
-  m_PrefabInstance: {fileID: 7501975499785406660}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &7501975499785406663
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7501975499785406662}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c10513f8423c0cc47968a73b5f622a38, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  default_FOV: 60
-  ZoomIn_Fov: 50
-  zoom_Speed: 10
-  zoom_Key: 324
-  weapon_Camera: {fileID: 7501975499785406661}

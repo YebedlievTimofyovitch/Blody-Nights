@@ -12,7 +12,7 @@ public class Weapon : MonoBehaviour
 
     [SerializeField] private KeyCode reload_Key = KeyCode.None;
     [SerializeField] private float reload_Time = 0.5f;
-    private bool has_Ammo_AtAll = true;
+    private bool is_Reloading = false;
     private bool has_Ammo_InMag = true;
     [SerializeField] private int ammo_Total = 120;
     [SerializeField] private int ammo_Mag_Capacity = 30;
@@ -24,42 +24,39 @@ public class Weapon : MonoBehaviour
     [SerializeField] private GameObject blood_Splatter = null;
     [SerializeField] private GameObject bullet_ImpactDUST = null;
 
-    [SerializeField] private float fire_Rate = 0.5f;
+    [SerializeField] private float RPM = 150.0f;
+    private float fire_Rate = 0.0f;
     private float next_Fire = 0.0f;
 
     private RaycastHit hit;
 
     private void Awake()
     {
-        
+        fire_Rate =  60.0f/RPM;
     }
 
     private void Update()
     {
-        MuzzleFalsh();
-
         if(ammo_InMag != ammo_Mag_Capacity && Input.GetKeyDown(reload_Key))
         {
             StartCoroutine(Reload());
         }
-
-        if(Input.GetKey(fire_Button))
+        if (Input.GetKey(fire_Button))
         {
             Shoot();
         }
-        
     }
 
     private void Shoot()
     {
-        if (has_Ammo_InMag)
+        if (has_Ammo_InMag && !is_Reloading && Time.time > next_Fire)
         {
+            AmmoCounter();
+            muzzle_Flash.Play();
+            next_Fire = Time.time + fire_Rate;
 
-            if (Physics.Raycast(camera_Transform.position, camera_Transform.forward, out hit, firing_Distance, ~player_Layer) && Time.time > next_Fire)
+            if (Physics.Raycast(camera_Transform.position, camera_Transform.forward, out hit, firing_Distance, ~player_Layer))
             {
-                AmmoCounter();
-
-                next_Fire = Time.time + fire_Rate;
                 print("jus hit == " + hit.collider.name);
                 EnemyHealth enemyhit = hit.collider.GetComponent<EnemyHealth>();
 
@@ -74,7 +71,6 @@ public class Weapon : MonoBehaviour
                 }
                 else
                     SpawnHitFX(hit.point, hit.normal, bullet_ImpactDUST);
-
             }
         }
     }
@@ -105,7 +101,6 @@ public class Weapon : MonoBehaviour
             else
             {
                 has_Ammo_InMag = false;
-                has_Ammo_AtAll = false;
                 print("RELOAD!");
             }
         }
@@ -115,12 +110,12 @@ public class Weapon : MonoBehaviour
     {
         if (ammo_Total == 0)
         {
-            has_Ammo_AtAll = false;
             print("OUT OF AMMO!");
             yield return null;
         }
         else
         {
+            is_Reloading = true;
             yield return new WaitForSeconds(reload_Time);
 
             int a_in_m = ammo_InMag;
@@ -130,7 +125,6 @@ public class Weapon : MonoBehaviour
             if (ammountToAdd > ammo_Total)
             {
                 ammountToAdd = ammo_Total;
-                has_Ammo_AtAll = false;
                 ammo_Total -= ammountToAdd;
             }
             else
@@ -139,26 +133,13 @@ public class Weapon : MonoBehaviour
             print("Ammo Total = :" + ammo_Total);
             has_Ammo_InMag = true;
             ammo_InMag += ammountToAdd;
+            is_Reloading = false;
         }
+        
     }
 
     private void SpawnHitFX(Vector3 position , Vector3 normal , GameObject particleSystem)
     {
         Instantiate(particleSystem , position, Quaternion.FromToRotation(Vector3.forward , normal));
-    }
-
-    private void MuzzleFalsh()
-    {
-        if (Input.GetKey(fire_Button) && has_Ammo_InMag)
-        {
-            ParticleSystem.EmissionModule emmision = muzzle_Flash.emission;
-            emmision.rateOverTime = 1000.0f;
-        }
-        else
-        {
-            ParticleSystem.EmissionModule emmision = muzzle_Flash.emission;
-            emmision.rateOverTime = 0.0f;
-        }
-            
     }
 }
