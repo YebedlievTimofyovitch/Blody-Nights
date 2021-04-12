@@ -2,11 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum AmmoType { Pistol , Kalashnykof , Shotgun , Default};
+
 public class WeaponSwitcher : MonoBehaviour
 {
     [SerializeField] private  KeyCode weapon_DownKey = KeyCode.None, weapon_UpKey = KeyCode.None;
     private List<GameObject> weapon_List = new List<GameObject>();
+    public List<GameObject> GetWeapons { get { return weapon_List; } }
+    
     private GameObject current_ActiveWeapon = null;
+    
 
     private void Awake()
     {

@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
+    [SerializeField] private AmmoType ammo_Type = AmmoType.Default;
+    public AmmoType GetAmmoType { get{ return ammo_Type; } }
+
     [SerializeField] private KeyCode fire_Button = KeyCode.None;
     [SerializeField] private Transform camera_Transform = null;
     [SerializeField] private LayerMask player_Layer;
@@ -14,6 +17,7 @@ public class Weapon : MonoBehaviour
     [SerializeField] private float reload_Time = 0.5f;
     private bool is_Reloading = false;
     private bool has_Ammo_InMag = true;
+    [SerializeField] int ammo_Total_Cap = 100;
     [SerializeField] private int ammo_Total = 120;
     [SerializeField] private int ammo_Mag_Capacity = 30;
     [SerializeField] private int ammo_InMag = 30;
@@ -136,6 +140,22 @@ public class Weapon : MonoBehaviour
             is_Reloading = false;
         }
         
+    }
+
+    public bool AddAmmo(int ammo_To_Add)
+    {
+        if(ammo_Total == ammo_Total_Cap)
+        {
+            return false;
+        }
+
+        ammo_Total += ammo_To_Add;
+        if(ammo_Total > ammo_Total_Cap)
+        {
+            ammo_Total = ammo_Total_Cap;
+        }
+
+        return true;
     }
 
     private void SpawnHitFX(Vector3 position , Vector3 normal , GameObject particleSystem)

@@ -11,6 +11,8 @@ public class PlayerMove : MonoBehaviour
     private bool is_Moving = false;
     public bool IsMoving { get { return is_Moving; } }
 
+    private WeaponSwitcher weaponswitcher = null;
+
     [SerializeField] string horizontal_InputName = "", vertical_InputName = "";
     private float movement_Speed = 0.0f;
     [SerializeField] private float speed_Walk = 1.0f , speed_Run = 2.0f;
@@ -24,8 +26,11 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private float slope_Force = 10.0f;
     [SerializeField] private float slope_Force_RayLength = 0.0f;
 
+    [SerializeField] private WeaponSwitcher weapon_switcher = null;
+
     void Awake()
     {
+        weaponswitcher = GetComponentInChildren<WeaponSwitcher>();
         player_ChaCon = GetComponent<CharacterController>();
     }
 
@@ -117,5 +122,32 @@ public class PlayerMove : MonoBehaviour
         }
 
         return false;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.tag == "Ammo")
+        {
+            Ammunition ammu = other.GetComponent<Ammunition>();
+            foreach (GameObject weaponObject in weaponswitcher.GetWeapons)
+            {
+                Ammunition ammo_Pack = other.GetComponent<Ammunition>();
+                Weapon weapon = weaponObject.GetComponent<Weapon>();
+                if(weapon != null && ammo_Pack != null)
+                {
+                    if(weapon.GetAmmoType == ammo_Pack.GetAmmoType)
+                    {
+                        bool should_DestroyAmmoPack = weapon.AddAmmo(ammo_Pack.GetAmmo_InPack);
+                        if (should_DestroyAmmoPack)
+                        {
+                            other.gameObject.SetActive(false);
+                            break;
+                        }
+                        else
+                            break;
+                    }
+                }
+            }
+        }
     }
 }
