@@ -19,8 +19,11 @@ public class Weapon : MonoBehaviour
     private bool has_Ammo_InMag = true;
     [SerializeField] int ammo_Total_Cap = 100;
     [SerializeField] private int ammo_Total = 120;
+    public int GetAmmoTotal { get { return ammo_Total; } }
+
     [SerializeField] private int ammo_Mag_Capacity = 30;
     [SerializeField] private int ammo_InMag = 30;
+    public int GetAmmoInMag { get { return ammo_InMag; } }
 
     [SerializeField] private float firing_Distance = 30.0f;
     [SerializeField] private float damage = 1.0f;
@@ -61,7 +64,6 @@ public class Weapon : MonoBehaviour
 
             if (Physics.Raycast(camera_Transform.position, camera_Transform.forward, out hit, firing_Distance, ~player_Layer))
             {
-                print("jus hit == " + hit.collider.name);
                 EnemyHealth enemyhit = hit.collider.GetComponent<EnemyHealth>();
 
                 if (enemyhit != null)
@@ -81,31 +83,20 @@ public class Weapon : MonoBehaviour
 
     private void AmmoCounter()
     {
-        if (ammo_Total > 0)
+        if (ammo_Total >= 0)
         {
 
             if (ammo_InMag > 0)
             {
-                print("Ammo In Mag = " + ammo_InMag);
                 ammo_InMag -= 1;
+                if(ammo_InMag == 0)
+                {
+                    has_Ammo_InMag = false;
+                }
             }
-            else
+            else if(ammo_InMag == 0)
             {
                 has_Ammo_InMag = false;
-                print("RELOAD!");
-            }
-        }
-        else if (ammo_Total == 0)
-        {
-            if (ammo_InMag > 0)
-            {
-                print("Ammo In Mag = " + ammo_InMag);
-                ammo_InMag -= 1;
-            }
-            else
-            {
-                has_Ammo_InMag = false;
-                print("RELOAD!");
             }
         }
     }
@@ -114,7 +105,6 @@ public class Weapon : MonoBehaviour
     {
         if (ammo_Total == 0)
         {
-            print("OUT OF AMMO!");
             yield return null;
         }
         else
@@ -134,7 +124,6 @@ public class Weapon : MonoBehaviour
             else
                 ammo_Total -= ammountToAdd;
 
-            print("Ammo Total = :" + ammo_Total);
             has_Ammo_InMag = true;
             ammo_InMag += ammountToAdd;
             is_Reloading = false;
@@ -153,9 +142,10 @@ public class Weapon : MonoBehaviour
         if(ammo_Total > ammo_Total_Cap)
         {
             ammo_Total = ammo_Total_Cap;
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     private void SpawnHitFX(Vector3 position , Vector3 normal , GameObject particleSystem)

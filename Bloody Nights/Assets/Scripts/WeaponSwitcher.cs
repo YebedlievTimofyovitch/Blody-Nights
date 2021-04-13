@@ -11,6 +11,7 @@ public class WeaponSwitcher : MonoBehaviour
     public List<GameObject> GetWeapons { get { return weapon_List; } }
     
     private GameObject current_ActiveWeapon = null;
+    public GameObject GetActiveWeapon { get { return current_ActiveWeapon; } }
     
 
     private void Awake()

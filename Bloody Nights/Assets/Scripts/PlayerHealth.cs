@@ -33,6 +33,7 @@ public class PlayerHealth : MonoBehaviour
 
         if(Health <= 0.0f)
         {
+            Health = 0.0f;
             Death();
         }
     }
